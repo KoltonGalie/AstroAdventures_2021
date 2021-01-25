@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <script src='scripts/enemys.js'></script>
+       <script src='scripts/shots.js'></script>
+       <script src='scripts/explosions.js'></script>
+       <style>
+
+           @font-face {
+               font-family: 'GoodTimes';
+               src: url(fonts/GoodTimes/goodTimes.ttf);
+           }
+       </style>
+       <title>Astro Adventures VideoGame</title>
+	   <script>
+	   	
+			//canvas variables
+			var canvas, ctx, timing;
+			
+			//background image
+			var bkgrnd=new Image();
+           	bkgrnd.src="images/space.png";
+
+		   //Delta AI image
+		   var AI = new Image();
+		   AI.src = "images/AI.png";
+
+			//enemy image
+			var en=new Image();
+			en.src='images/alien2.png';
+			
+			//enemy array
+			var enemys;
+			var enemyRate;
+			var enMaxSpeed;
+			//game mechanics
+			var level;
+			var health;
+			var score;
+			var timingIncrement = 1;
+			
+			//start scene variables
+			var startScene=true;
+			var charScene=false;
+			var instructScene=false;
+			var startSelection=1;
+			var charSelection=1;
+			var maxCharSelection=6;
+			var maxStartSelection=3;
+			
+
+			//Cutscene Variables
+			var cutsceneIntro=false;
+			var cutsceneOne=false;
+			var cutsceneTwo=false;
+			var cutsceneThree=false;
+			var cutsceneFour=false;
+			var cutsceneFive=false;
+			var cutsceneEnd = false;
+			var isOneDone = false;
+			var isTwoDone = false;
+			var isThreeDone = false;
+			var isFourDone = false;
+			var isFiveDone = false;
+			var isEndDone = false;
+
+		   //Score at Cutscene
+		   var scoreOne = 0;
+		   var scoreTwo = 2000;
+		   var scoreThree = 4000;
+		   var scoreFour = 6000; 
+		   var scoreFive = 8000;
+		   var scoreEnd = 10000;
+			
+			//health image
+			var healthImg=new Image();
+            healthImg.src='images/health.png';
+           	var healthW, healthH, currFrame;
+			
+			//player variables
+			var player=new Image();
+			var shipColor = "rainbow";
+           	var playerX, playerY;
+            var playerS;
+            
+           	//regular shot variables
+           	var shotImg=new Image();
+           	shotImg.src='images/shot.png'; 
+           	var shotArr;
+            
+           	//explosion variables
+          	var explosion=new Image();
+            explosion.src='images/explosion.png'; 
+           	var expArr, expTiming, expFrameW, expFrameH;
+            
+            //keyboard variables (controls)
+			var leftKey, rightKey, spaceBar, prevSpace, xKey;
+			
+			//sound and music variables
+			var hit, theme;
+			var l1Music, l2Music, l3Music, l4Music;
+
+			//scrolling text
+			var textY;
+			
+			//initialize function
+			function initialize(){
+				
+				//establish canvas
+				canvas=document.getElementById('game');
+				ctx=canvas.getContext("2d");
+				
+				//set timing
+				timing=0;
+				
+				//set enemy variables
+				enemyRate=200;
+				enemys=new Array();
+				enMaxSpeed=.5;
+				
+				//set player variables
+				playerX=0;
+                playerY=(canvas.height-(player.height/8));
+               	playerS=2;
+
+				//sound variables from audio tags
+              	hit=document.getElementById('bomb');
+              	theme=document.getElementById('theme');
+              	l1Music=document.getElementById('lvl1');
+              	l2Music=document.getElementById('lvl2');
+              	l3Music=document.getElementById('lvl3');
+              	l4Music=document.getElementById('lvl4');
+                		
+				//set game mechanics
+				level=1;
+				health=5;
+				score=0;
+				
+				//health image variables
+				healthW=95;
+				healthH=21;
+				
+				//shot array
+				shotArr=new Array();
+				
+				//explosion variables
+				expArr=new Array();
+				expTiming=0;
+				expFrameW=32;
+				expFrameH=34;
+				
+				//set the scrolling text at the bottom of the screen
+				textY=canvas.height
+				
+				//keyboard controls
+                leftKey=false;
+                rightKey=false;
+                spaceBar=false;
+               	xKey=false;
+               	prevSpace=spaceBar;
+				var prevLeft=leftKey;
+                var prevRight=rightKey;
+		
+
+                document.addEventListener("keydown", keyDownHandler);
+                document.addEventListener("keyup", keyUpHandler);
+				
+				update();
+			}
+			
+			//update function
+		   function update() {
+				if(startScene==true){
+					if(spaceBar&&prevSpace!=spaceBar){
+						//alert(startSelection);
+						spaceBar=false;
+						if(charScene){
+							if(charSelection==1){
+								charScene=false;
+							}
+							if(charSelection == 2) {
+                                shipColor = "white"; charScene = false;
+							}
+                            if (charSelection == 3) {
+                                shipColor = "pink"; charScene = false;
+							}
+                            if (charSelection == 4) {
+                                shipColor = "yellow"; charScene = false;
+							}
+                            if (charSelection == 5) {
+                                shipColor = "blue"; charScene = false;
+							}
+                            if (charSelection == 6) {
+                                shipColor = "rainbow"; charScene = false;
+                            }
+						}else if(instructScene){
+							instructScene=false;
+						}else{
+							if(startSelection==1){
+								startScene=false;
+							}
+							if(startSelection==2){
+								instructScene=true;
+							}
+							if(startSelection==3){
+								charScene=true;
+							}
+						}
+					}
+					if(rightKey&&prevRight!=rightKey){
+						if(charScene){
+							charSelection+=1;
+							if(charSelection>=maxCharSelection+1){
+								charSelection=1;
+							}
+						}else{
+							startSelection+=1;
+							if(startSelection>=maxStartSelection+1){
+								startSelection=1;
+							}
+						}
+					}
+					if(leftKey&&prevLeft!=leftKey){
+						if(charScene){
+							charSelection-=1;
+							if(charSelection<=0){
+								charSelection=maxCharSelection;
+							}
+						}else{
+							startSelection-=1;
+							if(startSelection<=0){
+								startSelection=maxStartSelection;
+							}
+						}
+					}
+					prevLeft=leftKey;
+					prevRight=rightKey;
+					prevSpace=spaceBar;
+					
+				} else {
+					if (xKey && cutsceneOne) {
+						cutsceneOne = false;
+						isOneDone = true;
+						timingIncrement = 1;
+						//timing = scoreOne;
+						enemys = [];
+						healthW = 95;
+                        en.src = 'images/alien2.png';
+					}
+                    if (xKey && cutsceneTwo) {
+						cutsceneTwo = false;
+                        isTwoDone = true;
+                        timingIncrement = 1;
+						healthW = 95;
+						enemyRate = 180;
+						enemys = [];
+						playerS = 2.5;
+                        en.src = 'images/alien2.png';
+					}
+                    if (xKey && cutsceneThree) {
+                        cutsceneThree = false;
+                        isThreeDone = true;
+                        timingIncrement = 1;
+						healthW = 95;
+						enemyRate = 160;
+						enemys = [];
+						playerS = 3;
+                        en.src = 'images/alien2.png';
+					}
+                    if (xKey && cutsceneFour) {
+                        cutsceneFour = false;
+                        isFourDone = true;
+                        timingIncrement = 1;
+                        healthW = 95;
+						enemyRate = 140;
+						enemys = [];
+						playerS = 3.2;
+                        en.src = 'images/alien2.png';
+					}
+                    if (xKey && cutsceneFive) {
+                        cutsceneFive = false;
+                        isFiveDone = true;
+                        timingIncrement = 1;
+                        healthW = 95;
+						enemyRate = 120;
+						enemys = [];
+						playerS = 3.5;
+                        en.src = 'images/alien2.png';
+					}
+                    if (xKey && cutsceneEnd) {
+                        cutsceneEnd = false;
+                        isEndDone = true;
+                        timingIncrement = 1;
+                        healthW = 95;
+						enemyRate = 100;
+						enemys = [];
+                        en.src = 'images/alien2.png';
+                    }
+					//alert("Hello");
+					//update timing 60 tps
+					timing+=timingIncrement;
+					
+					//make text scroll up
+					textY-=.5;
+
+					//Press X to skip text scroll
+					if (xKey && timing < 1560) {
+						timing = 1560;
+						timingIncrement = 1;
+					}
+					//Game Code, Text is done Scrolling
+					if (timing > 1560) {
+						if (timing > 1600 && isOneDone==false) {
+                            cutsceneOne = true;
+                        }
+						
+						player.src = 'images/spaceships/spaceship' + shipColor + 'C.png';
+                        //alert(player.src)
+						//if score increases by 2000, move to next cutscene
+						if (score % 2000 == 0 && score != 0 && health != 0) {
+                            //level++; //increase level
+                            //playerS += 2; //increase player movement speed
+                            //score += 100; //increase score by 100pts
+
+							if (score >= scoreTwo && score < scoreThree && isTwoDone==false) {
+								cutsceneTwo = true;
+                                //enemyRate -= 5; //more enemies appear
+                                //enMaxSpeed += .5; //enemies can move faster
+								//enMaxSpeed += .5;
+							}
+							if (score >= scoreThree && score < scoreFour && isThreeDone==false) {
+								cutsceneThree = true;
+							}
+                            if (score >= scoreFour && score < scoreFive && isFourDone == false) {
+                                cutsceneFour = true;
+							}
+                            if (score >= scoreFive && score < scoreEnd && isFiveDone == false) {
+                                cutsceneFive = true;
+                            }
+                            if (score >= scoreEnd && isEndDone == false) {
+                                cutsceneFive = true;
+                            }
+						}
+
+
+						if (isTwoDone == false && cutsceneTwo) {
+							timingIncrement = 0;
+						}
+
+
+						//Change the background image for each level
+						switch(level){
+							case 1:	bkgrnd.src='images/space.png'; theme.src='x.mp3'; break;
+
+						}
+
+						//minimum enemy rate: 3 every second
+						if(enemyRate<20) enemyRate=40;
+
+						//create an enemy at enemy rate
+						if(timing%enemyRate==0) enemys.push(new enemy(Math.random()*canvas.width-en.width, 0, en, parseInt(Math.random()*enMaxSpeed)+1));
+
+						//update all of the enemy positions
+						for(var x=0; x<enemys.length; x++)
+						{
+							//call the enemy obect's update function
+							enemys[x].update();
+
+							//if enemy off screen, delete from array
+							if(enemys[x].y>canvas.height){ 
+								health--; 
+								healthW-=19;
+								enemys.splice(x, 1); 
+							}
+						}
+
+						//when the right arrow is pressed, move right
+						if(rightKey && playerX<canvas.width-(player.width/13)){ playerX+=playerS; player.src='images/spaceships/spaceship'+shipColor+'R.png'; }
+
+				//when the left arrow is pressed, move left
+				else if(leftKey && playerX>=0 ){ playerX-=playerS; player.src='images/spaceships/spaceship'+shipColor+'L.png'; }
+
+				//if the player is not moving, use idle sprite
+				else player.src='images/spaceships/spaceship'+shipColor+'C.png';
+
+				//if spacebar is pressed, shoot
+				if(spaceBar&&prevSpace!=spaceBar) shotArr.push(new shot(playerX+(player.width/16)-17, playerY-(player.height/16), shotImg));
+
+						//update all of the shots positions
+						for(var y=0; y<shotArr.length; y++)
+						{
+							//call the shot object's update function
+							shotArr[y].update();
+
+							//if shot is off screen, delete from array 
+							if(shotArr[y].y<0) shotArr.splice(y, 1);
+						}
+
+						//check all shots against all enemies for a collision
+						for(var z=0; z<shotArr.length; z++)
+						{
+							var collision=false; // assume there is not a collision
+							for(var a=0; a<enemys.length; a++)
+							{
+								//if the shot box overlaps with the enemy box there is a collision
+								if(shotArr[z].y+shotImg.height>=enemys[a].y
+								&&shotArr[z].y<=enemys[a].y+en.height
+								&&shotArr[z].x+shotImg.width>=enemys[a].x
+								&&shotArr[z].x<=enemys[a].x+en.width)
+								{
+									expArr.push(new expObj(enemys[a].x, enemys[a].y, explosion, timing)); //create an explosion
+									enemys.splice(a, 1); //destroy the enemy
+									collision=true; //there was a collision
+									score+=100; //increase score
+									break;
+								}
+							}
+
+							if(collision){
+								shotArr.splice(z, 1); //destroy the shot
+								//hit.play(); //play an explosion noise
+							}
+						}
+
+						//reset space bar so holding is impossible
+						prevSpace=spaceBar;
+
+						//after an explosion, delete the explosion and stop the hit sound
+						for(var b=0; b<expArr.length; b++) 
+							if(timing-expArr[b].time>10){ 
+								expArr.splice(b, 1);
+								//hit.pause();
+							}
+
+					}
+				}
+				draw();
+				requestAnimationFrame(update);
+			}
+			
+			//draw function
+			function draw(){
+				if(startScene==true){
+					var mainX=145;
+					var mainY=140;
+					ctx.clearRect(0,0,canvas.width, canvas.height);
+					ctx.drawImage(bkgrnd,0,0,550,347);
+					var ogStroke='black';
+					var ugStroke='red';
+					var ogFill = 'yellow';
+					var ugFill = 'white';
+					ctx.fillStyle=ogFill;
+					ctx.strokeStyle=ogStroke;
+                    ctx.font = "25px GoodTimes";
+					if(charScene){
+                        ctx.fillText("Main Menu", mainX + 50, mainY-100);
+                        ctx.strokeText("Main Menu", mainX + 50, mainY-100);
+						if(charSelection==1){
+							//alert(startSelection);
+							ctx.strokeStyle=ugStroke;
+                            ctx.strokeText("Main Menu", mainX + 50, mainY-100);
+						}
+                        if (shipColor == "white")
+                            ctx.fillStyle = ugFill;
+                        else
+                            ctx.fillStyle = ogFill;
+						ctx.strokeStyle=ogStroke;
+						ctx.fillText("White", mainX+70, mainY+30);
+                        ctx.strokeText("White", mainX + 70, mainY+30);
+						if(charSelection==2){
+							//alert(startSelection);
+							ctx.strokeStyle=ugStroke;
+                            ctx.strokeText("White", mainX + 70, mainY+30);
+						}
+                        if (shipColor == "pink")
+                            ctx.fillStyle = ugFill;
+                        else
+                            ctx.fillStyle = ogFill;
+						ctx.strokeStyle=ogStroke;
+						ctx.fillText("Pink", mainX+80, mainY+60);
+						ctx.strokeText("Pink", mainX+80, mainY+60);
+						if(charSelection==3){
+							//alert(startSelection);
+							ctx.strokeStyle=ugStroke;
+							ctx.strokeText("Pink", mainX+80, mainY+60);
+						}
+                        if (shipColor== "yellow")
+                            ctx.fillStyle = ugFill;
+                        else
+                            ctx.fillStyle = ogFill;
+                        ctx.strokeStyle = ogStroke;
+                        ctx.fillText("Yellow", mainX+55, mainY + 90);
+                        ctx.strokeText("Yellow", mainX+55, mainY + 90);
+                        if (charSelection == 4) {
+                            //alert(startSelection);
+                            ctx.strokeStyle = ugStroke;
+                            ctx.strokeText("Yellow", mainX+55, mainY + 90);
+						}
+                        if (shipColor == "blue")
+                            ctx.fillStyle = ugFill;
+                        else
+                            ctx.fillStyle = ogFill;
+                        ctx.strokeStyle = ogStroke;
+                        ctx.fillText("Blue", mainX+75, mainY + 120);
+                        ctx.strokeText("Blue", mainX+75, mainY + 120);
+						if (charSelection == 5) {
+							//alert(startSelection);
+							ctx.strokeStyle = ugStroke;
+							ctx.strokeText("Blue", mainX+75, mainY + 120);
+						}
+						if(shipColor=="rainbow")
+							ctx.fillStyle = ugFill;
+						else
+                            ctx.fillStyle = ogFill;
+                            ctx.strokeStyle = ogStroke;
+                        ctx.fillText("Rainbow", mainX+50, mainY + 150);
+                        ctx.strokeText("Rainbow", mainX+50, mainY + 150);
+                        if (charSelection == 6) {
+                            //alert(startSelection);
+                            ctx.strokeStyle = ugStroke;
+                            ctx.strokeText("Rainbow", mainX+50, mainY + 150);
+                        }
+					} else if (instructScene) {
+                        ctx.font = "20px GoodTimes";
+                        ctx.fillText("Welcome to Astro Adventures!", mainX-100, mainY-100);
+						ctx.strokeText("Welcome to Astro Adventures!", mainX - 100, mainY - 100);
+                        ctx.fillText("use the Left and Right arrow", mainX - 100, mainY - 75);
+                        ctx.strokeText("use the Left and Right arrow", mainX - 100, mainY - 75);
+                        ctx.fillText("keys to move your spaceship", mainX - 80, mainY - 50);
+                        ctx.strokeText("keys to move your spaceship", mainX - 80, mainY - 50);
+                        ctx.fillText("and navigate the main menu.", mainX - 80, mainY - 25);
+                        ctx.strokeText("and navigate the main menu.", mainX - 80, mainY - 25);
+                        ctx.fillText("use the spacebar to shoot", mainX - 80, mainY);
+						ctx.strokeText("use the spacebar to shoot", mainX - 80, mainY);
+                        ctx.fillText("and select options. At the top", mainX - 80, mainY+25);
+                        ctx.strokeText("and select options. At the top", mainX - 80, mainY + 25);
+                        ctx.fillText("left of the screen, is your", mainX - 80, mainY + 50);
+                        ctx.strokeText("left of the screen, is your", mainX - 80, mainY + 50);
+                        ctx.fillText("health if an enemy gets past", mainX - 80, mainY + 75);
+                        ctx.strokeText("health if an enemy gets past", mainX - 80, mainY + 75);
+                        ctx.fillText("you, your health decreases...", mainX - 80, mainY + 100);
+                        ctx.strokeText("you, your health decreases...", mainX - 80, mainY + 100);
+                        ctx.fillText("good luck, have fun, and enjoy!", mainX - 100, mainY+ 150);
+						ctx.strokeText("good luck, have fun, and enjoy!", mainX - 100, mainY + 150);
+                        ctx.font = "25px GoodTimes";
+					}else{
+						ctx.strokeStyle=ogStroke;
+						ctx.fillText("Play", mainX+85, mainY);
+						ctx.strokeText("Play", mainX+85, mainY);
+						if(startSelection==1){
+							//alert(startSelection);
+							ctx.strokeStyle=ugStroke;
+							ctx.strokeText("Play", mainX+85, mainY);
+						}
+						ctx.strokeStyle=ogStroke;
+						ctx.fillText("instructions", mainX+30, mainY+30);
+						ctx.strokeText("instructions", mainX+30, mainY+30);
+						if(startSelection==2){
+							//alert(startSelection);
+							ctx.strokeStyle=ugStroke;
+							ctx.strokeText("instructions", mainX+30, mainY+30);
+						}
+						ctx.strokeStyle=ogStroke;
+						ctx.fillText("Choose Character", mainX-30, mainY+60);
+						ctx.strokeText("Choose Character", mainX-30, mainY+60);
+						if(startSelection==3){
+							//alert(startSelection);
+							ctx.strokeStyle=ugStroke;
+							ctx.strokeText("Choose Character", mainX-30, mainY+60);
+						}
+                        ctx.strokeStyle = ogStroke;
+						ctx.font = "20px Arial"
+                        ctx.fillText("Made by videogame design group 2084-901", 75, 270);
+                        ctx.strokeText("Made by videogame design group 2084-901", 75, 270);
+					}
+					
+					//alert(startSelection);
+				}else{
+					//clear the canvas and then draw the background
+					ctx.clearRect(0,0,canvas.width, canvas.height);
+					ctx.drawImage(bkgrnd,0,0,550,347);
+
+					//if text is scrolling, play the main theme
+					if(timing<1560) theme.play();
+
+					//During the game intro, make a text scroll
+					if(timing<1380&&textY+660>0){
+
+						//establish font and text style
+						ctx.fillStyle='yellow';
+						ctx.strokeStyle='black';
+						ctx.font = "14px GoodTimes";
+
+						
+						if (timing > 1 && isOneDone==false) {
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+							ctx.fillStyle = "gray";
+							ctx.fillRect(10, 10, 530, 330);
+							ctx.fillStyle = "black";
+							ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+							ctx.fillStyle = "black";
+                            ctx.fillText("\"Welcome, cadet, to the International Astrological", 12, 80);
+							ctx.strokeText("\"Welcome, cadet, to the International Astrological", 12, 80);
+                            ctx.fillText("Network, or IAN for short. I am Delta, your personal", 12, 110);
+                            ctx.strokeText("Network, or IAN for short. I am Delta, your personal", 12, 110);
+                            ctx.fillText("AI who will be helping you on your journey through", 12, 140);
+                            ctx.strokeText("AI who will be helping you on your journey through", 12, 140);
+                            ctx.fillText("our solar system.\" - Delta", 12, 170);
+                            ctx.strokeText("our solar system.\" - Delta", 12, 170);
+							ctx.font = "20px GoodTimes";
+                            ctx.fillText("Get Ready to Launch!", 80, 260);
+							ctx.strokeText("Get Ready to Launch!", 80, 260);
+                            ctx.font = "25px GoodTimes";
+                        }
+
+
+
+						//flashing line so players can skip by pressing x
+						if(textY+450<canvas.height-30 && timing%30>=0 && timing%30<=15){
+							ctx.font = "20px GoodTimes";
+							ctx.fillText("Press x to skip", 175, 330);
+							ctx.strokeText("Press x to skip", 175, 330);
+						}
+					}
+
+					//play different background music for each level
+					if(level==1&&timing>1560) l1Music.play();
+					else if(level==2) {l1Music.pause(); l2Music.play();}
+					else if(level==3) {l2Music.pause(); l3Music.play();}
+					else if(level==4) {l3Music.pause(); l4Music.play();}
+
+					//draw the actual game after the intro
+					if(timing>1380)
+					{
+						//draw all created enemies
+						for(var x=0; x<enemys.length; x++) enemys[x].draw(ctx);
+
+						//draw all created shots
+						for(var y=0; y<shotArr.length; y++) shotArr[y].draw(ctx);
+
+						//draw all created explosions
+						for(var z=0; z<expArr.length; z++) 
+							if(timing-expArr[z].time>5)
+								expArr[z].draw(ctx, 32, 34, 1);
+							else
+								expArr[z].draw(ctx, 32, 34, 0);
+
+						//draw the player
+						ctx.drawImage(player, playerX, playerY-50, 50, 50);
+
+						//draw the game mechanics in the top right corner
+						ctx.fillStyle='Yellow';
+						ctx.font = "15px GoodTimes";
+						ctx.drawImage(healthImg, 0, 0, healthW, healthH, 10, 5, healthW, 21);
+						ctx.fillText(score, canvas.width-60, 25);
+
+
+                        //Cutscene statements
+                        if (cutsceneOne) {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(bkgrnd, 0, 0, 550, 347);
+                            timingIncrement = 0;
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+                            ctx.fillStyle = "gray";
+                            ctx.fillRect(10, 10, 530, 330);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+                            ctx.fillStyle = "black";
+                            ctx.strokeStyle = "black";
+                            ctx.font = "15px Arial";
+                            ctx.fillText("\"Our first stop is Mars. Mars, better known as the Red Planet, has the same", 12, 80);
+                            ctx.strokeText("\"Our first stop is Mars. Mars, better known as the Red Planet, has the same", 12, 80);
+                            ctx.fillText("mass as Earth and is home to the tallest mountain in our entire solar system!!", 12, 110);
+                            ctx.strokeText("mass as Earth and is home to the tallest mountain in our entire solar system!!", 12, 110);
+                            ctx.fillText("How cool is that!", 12, 140);
+                            ctx.strokeText("How cool is that!", 12, 140);
+                            ctx.fillText("Uh oh looks like we have something coming up ahead…", 12, 170);
+                            ctx.strokeText("Uh oh looks like we have something coming up ahead…", 12, 170);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("ALIENS!\" - Delta", 80, 260);
+							ctx.strokeText("ALIENS!\" - Delta", 80, 260);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("Press x to start", 175, 330);
+                            ctx.strokeText("Press x to start", 175, 330);
+							ctx.font = "25px GoodTimes";
+
+						}
+						if (cutsceneTwo) {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(bkgrnd, 0, 0, 550, 347);
+                            timingIncrement = 0;
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+                            ctx.fillStyle = "gray";
+                            ctx.fillRect(10, 10, 530, 330);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+							ctx.fillStyle = "black";
+                            ctx.font = "15px arial";
+                            ctx.fillText("\"I’ve never seen anything like that before on any of my journeys. I guess we’re", 12, 80);
+                            ctx.strokeText("\"I’ve never seen anything like that before on any of my journeys. I guess we’re", 12, 80);
+                            ctx.fillText("the lucky ones haha. We’re approaching Jupiter, home of the Great Red Spot.", 12, 110);
+                            ctx.strokeText("the lucky ones haha. We’re approaching Jupiter, home of the Great Red Spot.", 12, 110);
+                            ctx.fillText("The massive planet spins the fastest in our solar system with a magnetic ", 12, 140);
+                            ctx.strokeText("The massive planet spins the fastest in our solar system with a magnetic ", 12, 140);
+                            ctx.fillText("field 14 times stronger than earth. ", 12, 170);
+                            ctx.strokeText("field 14 times stronger than earth. ", 12, 170);
+                            //ctx.font = "15px Arial";
+							ctx.fillText("Oh no, I forgot to mention, we have to pass through the Asteroid Belt first. ", 12, 200);
+							ctx.strokeText("Oh no, I forgot to mention, we have to pass through the Asteroid Belt first. ", 12, 200);
+                            ctx.fillText("PREPARE YOURSELF!\" - Delta", 80, 260);
+							ctx.strokeText("PREPARE YOURSELF!\" - Delta", 80, 260);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("Press x to start", 175, 330);
+                            ctx.strokeText("Press x to start", 175, 330);
+                            ctx.font = "25px GoodTimes";
+						}
+                        if (cutsceneThree) {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(bkgrnd, 0, 0, 550, 347);
+                            timingIncrement = 0;
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+                            ctx.fillStyle = "gray";
+                            ctx.fillRect(10, 10, 530, 330);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+                            ctx.fillStyle = "black";
+                            ctx.font = "15px arial";
+                            ctx.fillText("\"Who would’ve thought asteroids could be so deadly right? Anyways,", 12, 80);
+                            ctx.strokeText("\"Who would’ve thought asteroids could be so deadly right? Anyways,", 12, 80);
+                            ctx.fillText("everyone's favorite planet Saturn is up next, right? Being mostly made of ", 12, 110);
+                            ctx.strokeText("everyone's favorite planet Saturn is up next, right? Being mostly made of ", 12, 110);
+                            ctx.fillText("Hydrogen, Saturn has the most visible rings in our solar system and has", 12, 140);
+                            ctx.strokeText("Hydrogen, Saturn has the most visible rings in our solar system and has", 12, 140);
+                            ctx.fillText("the most moons at 150.", 12, 170);
+                            ctx.strokeText("the most moons at 150.", 12, 170);
+                            ctx.font = "20px Arial";
+                            ctx.fillText("Not again! ALIENS APPROACHING!\" - Delta", 12, 200);
+							ctx.strokeText("Not again! ALIENS APPROACHING!\" - Delta", 12, 200);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("Press x to start", 175, 330);
+                            ctx.strokeText("Press x to start", 175, 330);
+                            ctx.font = "25px GoodTimes";
+                        }
+                        if (cutsceneFour) {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(bkgrnd, 0, 0, 550, 347);
+                            timingIncrement = 0;
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+                            ctx.fillStyle = "gray";
+                            ctx.fillRect(10, 10, 530, 330);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+                            ctx.fillStyle = "black";
+                            ctx.font = "15px arial";
+                            ctx.fillText("\"I’m really tired of these pesky aliens running about. We’re approaching the", 12, 80);
+                            ctx.strokeText("\"I’m really tired of these pesky aliens running about. We’re approaching the", 12, 80);
+                            ctx.fillText("ice giant, Uranus. The planet is four times bigger than Earth, rotates on its side,", 12, 110);
+                            ctx.strokeText("ice giant, Uranus. The planet is four times bigger than Earth, rotates on its side,", 12, 110);
+                            ctx.fillText("and is mainly made up of gases with the exception of its core and surroundings.", 12, 140);
+                            ctx.strokeText("and is mainly made up of gases with the exception of its core and surroundings.", 12, 140);
+                            ctx.fillText("I hope we don’t freeze out here.", 12, 170);
+                            ctx.strokeText("I hope we don’t freeze out here.", 12, 170);
+                            //ctx.font = "15px Arial";
+                            ctx.fillText("Is that a man out there?? Uh oh,", 12, 200);
+							ctx.strokeText("Is that a man out there?? Uh oh,", 12, 200);
+                            ctx.font = "20px arial";
+                            ctx.fillText("SPACE PIRATES!\" - Delta", 80, 260);
+							ctx.strokeText("SPACE PIRATES!\" - Delta", 80, 260);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("Press x to start", 175, 330);
+                            ctx.strokeText("Press x to start", 175, 330);
+                            ctx.font = "25px GoodTimes";
+                        }
+                        if (cutsceneFive) {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(bkgrnd, 0, 0, 550, 347);
+                            timingIncrement = 0;
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+                            ctx.fillStyle = "gray";
+                            ctx.fillRect(10, 10, 530, 330);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+                            ctx.fillStyle = "black";
+                            ctx.font = "15px arial";
+                            ctx.fillText("\"Who knew space pirates could be out this far huh. Oh well, glad its over.", 12, 80);
+                            ctx.strokeText("\"Who knew space pirates could be out this far huh. Oh well, glad its over.", 12, 80);
+                            ctx.fillText("There it is… Neptune! Neptune is a gas planet that is the farthest away", 12, 110);
+                            ctx.strokeText("There it is… Neptune! Neptune is a gas planet that is the farthest away", 12, 110);
+                            ctx.fillText("from earth. Other than us, only one other ship has ever been here.", 12, 140);
+                            ctx.strokeText("from earth. Other than us, only one other ship has ever been here.", 12, 140);
+                            ctx.fillText("It cannot support any life meaning that there shouldn’t be space pirates out here", 12, 170);
+                            ctx.strokeText("It cannot support any life meaning that there shouldn’t be space pirates out here", 12, 170);
+                            //ctx.font = "15px Arial";
+                            ctx.fillText("Wait, what's that coming over the horizon?? Uh oh,", 12, 200);
+                            ctx.strokeText("Wait, what's that coming over the horizon?? Uh oh,", 12, 200);
+                            ctx.font = "18px arial";
+                            ctx.fillText("SPACE PIRATES ARE AMBUSHING US!\" - Delta", 20, 260);
+							ctx.strokeText("SPACE PIRATES ARE AMBUSHING US!\" - Delta", 20, 260);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("Press x to start", 175, 330);
+                            ctx.strokeText("Press x to start", 175, 330);
+                            ctx.font = "25px GoodTimes";
+						}
+                        if (cutsceneEnd) {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(bkgrnd, 0, 0, 550, 347);
+                            timingIncrement = 0;
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(8, 8, 536, 336);
+                            ctx.fillStyle = "gray";
+                            ctx.fillRect(10, 10, 530, 330);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+							ctx.fillStyle = "black";
+                            ctx.font = "15px arial";
+                            ctx.fillText("\"We made it to Neptune, gathered information, survived aliens, an asteroid belt,", 12, 80);
+                            ctx.strokeText("\"We made it to Neptune, gathered information, survived aliens, an asteroid belt,", 12, 80);
+                            ctx.fillText("and an armada of pirates. I’m glad we can return home knowing", 12, 110);
+							ctx.strokeText("and an armada of pirates. I’m glad we can return home knowing", 12, 110);
+							ctx.font = "18px arial";
+                            ctx.fillText("our mission is complete.\" - Delta", 12, 140);
+                            ctx.strokeText("our mission is complete.\" - Delta", 12, 140);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("THANKS FOR PLAYING!", 80, 260);
+							ctx.strokeText("THANKS FOR PLAYING!", 80, 260);
+                            ctx.font = "20px GoodTimes";
+                            ctx.fillText("Press x to start", 175, 330);
+                            ctx.strokeText("Press x to start", 175, 330);
+                            ctx.font = "25px GoodTimes";
+                        }
+						//if health runs out, display the GAME OVER screen
+						if(health<=0){
+							ctx.clearRect(0,0,canvas.width, canvas.height);
+							ctx.drawImage(bkgrnd,0,0,550,347);
+
+							if(level>=4){ ctx.fillStyle='black'; ctx.strokeStyle='yellow'; }
+							else{ ctx.fillStyle='yellow'; ctx.strokeStyle='black'; }
+							ctx.font = "60px GoodTimes";
+							ctx.fillText("game over", 45, 170);
+							ctx.strokeText("game over", 45, 170);
+							ctx.font = "20px GoodTimes";
+							ctx.fillText("Your Score: "+score, 170, 200);
+							ctx.strokeText("Your Score: "+score, 170, 200);
+							ctx.font = "20px arial";
+							ctx.fillText("LEVEL: "+(score/1000)+1, 210, 240);
+							ctx.strokeText("LEVEL: "+(score/1000)+1, 210, 240);
+							ctx.fillText("Made by videogame design group 2084-901", 65, 260);
+							ctx.strokeText("Made by videogame design group 2084-901", 65, 260);
+						}
+					}
+				}
+			}
+		
+		
+		
+			//key pressed functions
+	        function keyDownHandler(e){
+                switch(e.keyCode){
+			case 32: spaceBar=true;break;
+                    case 37: leftKey=true;break;
+                    case 39: rightKey=true;break;
+                    case 88: xKey=true;break;
+                }
+            }
+            function keyUpHandler(e){
+                switch(e.keyCode){
+                	case 32: spaceBar=false;break;
+                    case 37: leftKey=false;break;
+                    case 39: rightKey=false;break;
+                    case 88: xKey=false;break;
+                }
+            }
+            //alert("hello");
+	   </script>
+    </head>
+    <body onload='initialize()'>
+    	<div style='background-image:url("images/bodybg.jpg"); background-repeat:no-repeat; margin-left:250px; display:inline-block; width:1026px; height:640px;'>
+	       <canvas id='game' width='550px' height='347px' style='margin-left:130px; margin-top:210px; border-radius:5px'></canvas>
+        </div>
+        <audio src='sounds/bombSound.mp3' id='bomb' preload='auto' controls='none' style='display:none'></audio>
+        <audio src='sounds/theme.mp3' id='theme' preload='auto' controls='none' style='display:none'></audio>
+        
+        <audio src='sounds/l1bm.mp3' id='lvl1' preload='auto' controls='none' style='display:none'></audio>
+        <audio src='sounds/l2bm.mp3' id='lvl2' preload='auto' controls='none' style='display:none'></audio>
+        <audio src='sounds/l3bm.mp3' id='lvl3' preload='auto' controls='none' style='display:none'></audio>
+        <audio src='sounds/l4bm.mp3' id='lvl4' preload='auto' controls='none' style='display:none'></audio>
+    </body>
+</html>
