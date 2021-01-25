@@ -314,7 +314,7 @@
                             cutsceneOne = true;
                         }
 						
-						player.src = 'images/spaceships/spaceshipBlueC.png';
+						player.src = 'images/Spaceships/spaceship'+shipColor+'C.png';
                         //alert(player.src)
 						//if score increases by 2000, move to next cutscene
 						if (score % 2000 == 0 && score != 0 && health != 0) {
@@ -375,13 +375,13 @@
 						}
 
 						//when the right arrow is pressed, move right
-						if(rightKey && playerX<canvas.width-(player.width/13)){ playerX+=playerS; player.src='images/spaceships/spaceship'+shipColor+'R.png'; }
+						if(rightKey && playerX<canvas.width-(player.width/13)){ playerX+=playerS; player.src='images/Spaceships/spaceship'+shipColor+'R.png'; }
 
 				//when the left arrow is pressed, move left
-				else if(leftKey && playerX>=0 ){ playerX-=playerS; player.src='images/spaceships/spaceship'+shipColor+'L.png'; }
+				else if(leftKey && playerX>=0 ){ playerX-=playerS; player.src='images/Spaceships/spaceship'+shipColor+'L.png'; }
 
 				//if the player is not moving, use idle sprite
-				else player.src='images/spaceships/spaceship'+shipColor+'C.png';
+				else player.src='images/Spaceships/spaceship'+shipColor+'C.png';
 
 				//if spacebar is pressed, shoot
 				if(spaceBar&&prevSpace!=spaceBar) shotArr.push(new shot(playerX+(player.width/16)-17, playerY-(player.height/16), shotImg));
