@@ -36,8 +36,9 @@
 			//game mechanics
 			var level;
 			var health;
-			var score;
-			var timingIncrement = 1;
+		   var score;
+		   var timingIncrementConst = 1;
+			var timingIncrement = timingIncrementConst;
 			
 			//start scene variables
 			var startScene=true;
@@ -82,7 +83,7 @@
 			var shipColor = "Rainbow";
            	var playerX, playerY;
             var playerS;
-            
+		   var playerSconst = 2;
            	//regular shot variables
            	var shotImg=new Image();
            	shotImg.src='images/shot.png'; 
@@ -120,9 +121,8 @@
 				
 				//set player variables
 				playerX=0;
-                playerY=(canvas.height-(player.height/8));
-               	playerS=2;
-
+				playerY = (canvas.height - (player.height / 8));
+                playerS = playerSconst;
 				//sound variables from audio tags
               	hit=document.getElementById('bomb');
               	theme=document.getElementById('theme');
@@ -241,7 +241,7 @@
 					if (xKey && cutsceneOne) {
 						cutsceneOne = false;
 						isOneDone = true;
-						timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						//timing = scoreOne;
 						enemys = [];
 						healthW = 95;
@@ -251,51 +251,51 @@
                     if (xKey && cutsceneTwo) {
 						cutsceneTwo = false;
                         isTwoDone = true;
-                        timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						healthW = 95;
 						health = 5;
 						enemyRate = 180;
 						enemys = [];
-						playerS = 2.5;
+                        playerS = playerSconst+.5;
                         en.src = 'images/asteroid.png';
 					}
                     if (xKey && cutsceneThree) {
                         cutsceneThree = false;
                         isThreeDone = true;
-                        timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						healthW = 95;
                         health = 5;
 						enemyRate = 160;
 						enemys = [];
-						playerS = 3;
+                        playerS = playerSconst+1;
                         en.src = 'images/alien2.png';
 					}
                     if (xKey && cutsceneFour) {
                         cutsceneFour = false;
                         isFourDone = true;
-                        timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						healthW = 95;
                         health = 5;
 						enemyRate = 140;
 						enemys = [];
-						playerS = 3.2;
+                        playerS = playerSconst+1.1;
                         en.src = 'images/pirate.png';
 					}
                     if (xKey && cutsceneFive) {
                         cutsceneFive = false;
                         isFiveDone = true;
-                        timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						healthW = 95;
                         health = 5;
 						enemyRate = 120;
 						enemys = [];
-						playerS = 3.5;
+                        playerS = playerSconst+1.3;
                         en.src = 'images/pirate.png';
 					}
                     if (xKey && cutsceneEnd) {
                         cutsceneEnd = false;
                         isEndDone = true;
-                        timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						healthW = 95;
                         health = 5;
 						enemyRate = 100;
@@ -312,7 +312,7 @@
 					//Press X to skip text scroll
 					if (xKey && timing < 1560) {
 						timing = 1560;
-						timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 					}
 					//Game Code, Text is done Scrolling
 					if (timing > 1560) {
@@ -843,8 +843,8 @@
                             ctx.fillText("THANKS FOR PLAYING!", 80, 260);
 							ctx.strokeText("THANKS FOR PLAYING!", 80, 260);
                             ctx.font = "20px GoodTimes";
-                            ctx.fillText("Press x to start", 175, 330);
-                            ctx.strokeText("Press x to start", 175, 330);
+                            ctx.fillText("Press x to free play", 145, 330);
+                            ctx.strokeText("Press x to free play", 145, 330);
                             ctx.font = "25px GoodTimes";
                         }
 						//if health runs out, display the GAME OVER screen
