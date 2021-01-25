@@ -578,6 +578,12 @@
 						ctx.font = "20px Arial"
                         ctx.fillText("Made by videogame design group 2084-901", 75, 270);
                         ctx.strokeText("Made by videogame design group 2084-901", 75, 270);
+						ctx.font = '10px Arial';
+                        ctx.save();
+                        ctx.translate(80, 150);
+						ctx.rotate(-0.2 * Math.PI);
+                        ctx.fillText('Use left and right arrow keys and spacebar!', 0, 0);
+                        ctx.restore();
 					}
 					
 					//alert(startSelection);
