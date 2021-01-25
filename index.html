@@ -245,23 +245,26 @@
 						//timing = scoreOne;
 						enemys = [];
 						healthW = 95;
-                        en.src = 'images/alien2.png';
+                        health = 5;
+                        en.src = 'images/alien.png';
 					}
                     if (xKey && cutsceneTwo) {
 						cutsceneTwo = false;
                         isTwoDone = true;
                         timingIncrement = 1;
 						healthW = 95;
+						health = 5;
 						enemyRate = 180;
 						enemys = [];
 						playerS = 2.5;
-                        en.src = 'images/alien2.png';
+                        en.src = 'images/asteroid.png';
 					}
                     if (xKey && cutsceneThree) {
                         cutsceneThree = false;
                         isThreeDone = true;
                         timingIncrement = 1;
 						healthW = 95;
+                        health = 5;
 						enemyRate = 160;
 						enemys = [];
 						playerS = 3;
@@ -271,27 +274,30 @@
                         cutsceneFour = false;
                         isFourDone = true;
                         timingIncrement = 1;
-                        healthW = 95;
+						healthW = 95;
+                        health = 5;
 						enemyRate = 140;
 						enemys = [];
 						playerS = 3.2;
-                        en.src = 'images/alien2.png';
+                        en.src = 'images/pirate.png';
 					}
                     if (xKey && cutsceneFive) {
                         cutsceneFive = false;
                         isFiveDone = true;
                         timingIncrement = 1;
-                        healthW = 95;
+						healthW = 95;
+                        health = 5;
 						enemyRate = 120;
 						enemys = [];
 						playerS = 3.5;
-                        en.src = 'images/alien2.png';
+                        en.src = 'images/pirate.png';
 					}
                     if (xKey && cutsceneEnd) {
                         cutsceneEnd = false;
                         isEndDone = true;
                         timingIncrement = 1;
-                        healthW = 95;
+						healthW = 95;
+                        health = 5;
 						enemyRate = 100;
 						enemys = [];
                         en.src = 'images/alien2.png';
@@ -314,7 +320,7 @@
                             cutsceneOne = true;
                         }
 						
-						player.src = 'images/Spaceships/spaceship'+shipColor+'C.png';
+						player.src = 'images/Spaceships/spaceship' + shipColor + 'C.png';
                         //alert(player.src)
 						//if score increases by 2000, move to next cutscene
 						if (score % 2000 == 0 && score != 0 && health != 0) {
@@ -338,7 +344,7 @@
                                 cutsceneFive = true;
                             }
                             if (score >= scoreEnd && isEndDone == false) {
-                                cutsceneFive = true;
+                                cutsceneEnd = true;
                             }
 						}
 
@@ -859,6 +865,8 @@
 							ctx.strokeText("LEVEL: "+(score/1000)+1, 210, 240);
 							ctx.fillText("Made by videogame design group 2084-901", 65, 260);
 							ctx.strokeText("Made by videogame design group 2084-901", 65, 260);
+                            ctx.fillText("Please refresh your browser to try again", 65, 290);
+                            ctx.strokeText("Please refresh your browser to try again", 65, 290);
 						}
 					}
 				}
