@@ -37,7 +37,7 @@
 			var level;
 			var health;
 		   var score;
-		   var timingIncrementConst = 2;
+		   var timingIncrementConst = 1;
 		   
 			var timingIncrement = timingIncrementConst;
 			
@@ -306,7 +306,7 @@
 					//alert("Hello");
 					//update timing 60 tps
 					
-					timer=setInterval(setTimer, 1);
+					timer=setInterval(setTimer, 17);
 					//make text scroll up
 					textY-=.5;
 
@@ -326,7 +326,7 @@
 						//if score increases by 2000, move to next cutscene
 						if (score % 2000 == 0 && score != 0 && health != 0) {
                             //level++; //increase level
-                            //playerS += 2; //increase player movement speed
+                            //playerS += 1; //increase player movement speed
                             //score += 100; //increase score by 100pts
 
 							if (score >= scoreTwo && score < scoreThree && isTwoDone==false) {
@@ -881,7 +881,7 @@
 		
 		
 		function setTimer(){//This function is purely to start the timer for the words per minute calculation. 
-            		timing+=timingIncrement;
+            		timing+=timingIncrement; 
        		}
 			//key pressed functions
 	        function keyDownHandler(e){
