@@ -38,6 +38,7 @@
 			var health;
 		   var score;
 		   var timingIncrementConst = 2;
+		   
 			var timingIncrement = timingIncrementConst;
 			
 			//start scene variables
@@ -304,8 +305,8 @@
                     }
 					//alert("Hello");
 					//update timing 60 tps
-					timing+=timingIncrement;
 					
+					timer=setInterval(setTimer, 1);
 					//make text scroll up
 					textY-=.5;
 
@@ -879,7 +880,9 @@
 			}
 		
 		
-		
+		function setTimer(){//This function is purely to start the timer for the words per minute calculation. 
+            		timing+=timingIncrement;
+       		}
 			//key pressed functions
 	        function keyDownHandler(e){
                 switch(e.keyCode){
