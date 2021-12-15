@@ -318,8 +318,8 @@
 						
 					   if(xKey && cutsceneIntro){
 						cutsceneIntro=false;
-						timing = 1600;
-                        			timingIncrement = timingIncrementConst;
+						timing = 1561;
+                        			//timingIncrement = timingIncrementConst;
 					   }
 										
 					}
@@ -692,7 +692,7 @@
 
                         //Cutscene statements
 			if(cutsceneIntro){
-			    //timingIncrement=.01;
+//timingIncrement=.01;
 			    ctx.fillStyle='yellow';
 						ctx.strokeStyle='black';
 						ctx.font = "14px GoodTimes";
@@ -920,8 +920,8 @@
 							ctx.font = "20px arial";
 							ctx.fillText("LEVEL: "+(score/1000)+1, 210, 240);
 							ctx.strokeText("LEVEL: "+(score/1000)+1, 210, 240);
-							ctx.fillText("Good Job!", 220, 260);
-							ctx.strokeText("Good Job!", 220, 260);
+							ctx.fillText("Nice try!", 220, 260);
+							ctx.strokeText("Nice Try!", 220, 260);
                             ctx.fillText("Please press the Esc key to try again", 95, 290);
                             ctx.strokeText("Please press the Esc key to try again", 95, 290);
 						}
