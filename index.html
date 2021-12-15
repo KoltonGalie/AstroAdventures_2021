@@ -242,6 +242,7 @@
 					if (xKey && cutsceneOne) {
 						cutsceneOne = false;
 						isOneDone = true;
+						timing=1600;
                         			timingIncrement = timingIncrementConst;
 						//timing = scoreOne;
 						enemys = [];
@@ -317,7 +318,7 @@
 						
 					   if(xKey && cutsceneIntro){
 						cutsceneIntro=false;
-						//timing = 1560;
+						timing = 1600;
                         			timingIncrement = timingIncrementConst;
 					   }
 										
@@ -327,6 +328,7 @@
 						if (timing > 1600 && isOneDone==false) {
 						cutsceneIntro=false;
                             			cutsceneOne = true;
+						timingIncrement=timingIncrementConst;
 						
                         }
 						
@@ -589,8 +591,10 @@
 						}
                         ctx.strokeStyle = ogStroke;
 						ctx.font = "20px Arial"
-                        ctx.fillText("Made for FBLA 2021", 75, 270);
-                        ctx.strokeText("Made for FBLA 2021", 75, 270);
+                        ctx.fillText("Made for FBLA 2021", 175, 270);
+                        ctx.strokeText("Made for FBLA 2021", 175, 270);
+			ctx.fillText("By Kolton Galie and George Clark", 130, 290);
+                        ctx.strokeText("By Kolton Galie and George Clark", 130, 290);
 						ctx.font = '10px Arial';
                         ctx.save();
                         ctx.translate(80, 150);
@@ -612,7 +616,7 @@
 					if(timing<1380&&textY+660>0){
 						cutSceneIntro=true;
 						if(cutsceneIntro){
-//timingIncrement=.01;
+			timingIncrement=.01;
 			    ctx.fillStyle='yellow';
 						ctx.strokeStyle='black';
 						ctx.font = "14px GoodTimes";
@@ -688,10 +692,11 @@
 
                         //Cutscene statements
 			if(cutsceneIntro){
+//timingIncrement=.01;
 			    ctx.fillStyle='yellow';
 						ctx.strokeStyle='black';
 						ctx.font = "14px GoodTimes";
-
+			
 						
 						
                             ctx.fillStyle = "yellow";
@@ -915,10 +920,10 @@
 							ctx.font = "20px arial";
 							ctx.fillText("LEVEL: "+(score/1000)+1, 210, 240);
 							ctx.strokeText("LEVEL: "+(score/1000)+1, 210, 240);
-							ctx.fillText("Nice Try!", 65, 260);
-							ctx.strokeText("Nice Try!", 65, 260);
-                            ctx.fillText("Please refresh your browser to try again", 65, 290);
-                            ctx.strokeText("Please refresh your browser to try again", 65, 290);
+							ctx.fillText("Good Job!", 220, 260);
+							ctx.strokeText("Good Job!", 220, 260);
+                            ctx.fillText("Please press the Esc key to try again", 95, 290);
+                            ctx.strokeText("Please press the Esc key to try again", 95, 290);
 						}
 					}
 				}
@@ -936,7 +941,7 @@
                     case 39: rightKey=true;break;
                     case 88: xKey=true;break;
                     case 27: window.location.reload(); break;
-		    case 65: alert(timing);
+		    //case 65: alert(timing);
 		}
             }
             function keyUpHandler(e){
@@ -945,6 +950,7 @@
                     case 37: leftKey=false;break;
                     case 39: rightKey=false;break;
                     case 88: xKey=false;break;
+		    case 27: window.location.reload(); break;
                 }
             }
             //alert("hello");
