@@ -45,10 +45,11 @@
 			var startScene=true;
 			var charScene=false;
 			var instructScene=false;
+			var leaderboardScene=false;
 			var startSelection=1;
 			var charSelection=1;
 			var maxCharSelection=6;
-			var maxStartSelection=3;
+			var maxStartSelection=4;
 			
 
 			//Cutscene Variables
@@ -196,6 +197,8 @@
                             }
 						}else if(instructScene){
 							instructScene=false;
+						}else if(leaderboardScene){
+							leaderboardScene=false;
 						}else{
 							if(startSelection==1){
 								startScene=false;
@@ -205,6 +208,9 @@
 							}
 							if(startSelection==3){
 								charScene=true;
+							}
+							if(startSelection==4){
+								leaderboardScene=true;
 							}
 						}
 					}
@@ -564,6 +570,19 @@
                         ctx.fillText("good luck, have fun, and enjoy!", mainX - 100, mainY+ 150);
 						ctx.strokeText("good luck, have fun, and enjoy!", mainX - 100, mainY + 150);
                         ctx.font = "25px GoodTimes";
+					}else if(leaderboardScene){
+						ctx.font = "30px GoodTimes";
+                        			ctx.fillText("Leaderboard:", mainX-15, mainY-100);
+						ctx.strokeText("Leaderboard:", mainX-15, mainY - 100);
+						ctx.font = "20px GoodTimes";
+						ctx.fillText("1. GeoCla : 220,927", mainX+20, mainY-60);
+						ctx.strokeText("1. GeoCla : 220,927", mainX+20, mainY - 60);
+						ctx.fillText("2. Kolt_55 : 145,392", mainX+20, mainY-30);
+						ctx.strokeText("2. Kolt_55 : 145,392", mainX+20, mainY - 30);
+						ctx.fillText("3. DaKing : 98,203", mainX+20, mainY);
+						ctx.strokeText("3. DaKing : 98,203", mainX+20, mainY);
+						ctx.fillText("4. Arxani : 40,125", mainX+20, mainY+30);
+						ctx.strokeText("4. Arxani : 40,125", mainX+20, mainY+30);
 					}else{
 						ctx.strokeStyle=ogStroke;
 						ctx.fillText("Play", mainX+85, mainY);
@@ -574,20 +593,27 @@
 							ctx.strokeText("Play", mainX+85, mainY);
 						}
 						ctx.strokeStyle=ogStroke;
-						ctx.fillText("instructions", mainX+30, mainY+30);
-						ctx.strokeText("instructions", mainX+30, mainY+30);
+						ctx.fillText("instructions", mainX+25, mainY+30);
+						ctx.strokeText("instructions", mainX+25, mainY+30);
 						if(startSelection==2){
 							//alert(startSelection);
 							ctx.strokeStyle=ugStroke;
-							ctx.strokeText("instructions", mainX+30, mainY+30);
+							ctx.strokeText("instructions", mainX+25, mainY+30);
 						}
 						ctx.strokeStyle=ogStroke;
-						ctx.fillText("Choose Character", mainX-30, mainY+60);
-						ctx.strokeText("Choose Character", mainX-30, mainY+60);
+						ctx.fillText("Character", mainX+30, mainY+60);
+						ctx.strokeText("Character", mainX+30, mainY+60);
 						if(startSelection==3){
 							//alert(startSelection);
 							ctx.strokeStyle=ugStroke;
-							ctx.strokeText("Choose Character", mainX-30, mainY+60);
+							ctx.strokeText("Character", mainX+30, mainY+60);
+						}
+						ctx.strokeStyle=ogStroke;
+						ctx.fillText("Leaderboard", mainX+15, mainY+90);
+						ctx.strokeText("Leaderboard", mainX+15, mainY+90);
+						if(startSelection==4){
+							ctx.strokeStyle=ugStroke;
+							ctx.strokeText("Leaderboard", mainX+15, mainY+90);
 						}
                         ctx.strokeStyle = ogStroke;
 						ctx.font = "20px Arial"
