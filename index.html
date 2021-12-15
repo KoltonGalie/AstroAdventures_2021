@@ -242,7 +242,7 @@
 					if (xKey && cutsceneOne) {
 						cutsceneOne = false;
 						isOneDone = true;
-                        timingIncrement = timingIncrementConst;
+                        			timingIncrement = timingIncrementConst;
 						//timing = scoreOne;
 						enemys = [];
 						healthW = 95;
@@ -608,7 +608,7 @@
 						ctx.font = "14px GoodTimes";
 
 						
-						if (timing > 1 && isOneDone==false) {
+						if (timing > 1 && isOneDone==false && cutsceneOne=false) {
                             ctx.fillStyle = "yellow";
                             ctx.fillRect(8, 8, 536, 336);
 							ctx.fillStyle = "gray";
