@@ -580,8 +580,8 @@
 						}
                         ctx.strokeStyle = ogStroke;
 						ctx.font = "20px Arial"
-                        ctx.fillText("Made for FBLA 2021", 75, 270);
-                        ctx.strokeText("Made for FBLA 2021", 75, 270);
+                        ctx.fillText("Made for FBLA 2021", 125, 270);
+                        ctx.strokeText("Made for FBLA 2021", 125, 270);
 						ctx.font = '10px Arial';
                         ctx.save();
                         ctx.translate(80, 150);
@@ -875,8 +875,8 @@
 							ctx.strokeText("LEVEL: "+(score/1000)+1, 210, 240);
 							ctx.fillText("Nice Try!", 65, 260);
 							ctx.strokeText("Nice Try!", 65, 260);
-                            ctx.fillText("Please refresh your browser to try again", 65, 290);
-                            ctx.strokeText("Please refresh your browser to try again", 65, 290);
+                            ctx.fillText("Please refresh your browser or press esc to try again", 65, 290);
+                            ctx.strokeText("Please refresh your browser or press esc to try again", 65, 290);
 						}
 					}
 				}
@@ -903,6 +903,11 @@
                     case 88: xKey=false;break;
                 }
             }
+	function  keyDownHandler(e) {
+	    if(e.key === "Escape") {
+		window.location.reload();
+	    }
+	}
             //alert("hello");
 	   </script>
     </head>
