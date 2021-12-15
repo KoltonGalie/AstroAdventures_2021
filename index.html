@@ -309,16 +309,25 @@
 					timer=setInterval(setTimer, 17);
 					//make text scroll up
 					textY-=.5;
-
+					
+					
 					//Press X to skip text scroll
-					if (xKey && timing < 1560) {
-						timing = 1560;
-                        timingIncrement = timingIncrementConst;
+					if (timing<1560) {
+						cutsceneIntro=true;
+						
+					   if(xKey && cutsceneIntro){
+						cutsceneIntro=false;
+						//timing = 1560;
+                        			timingIncrement = timingIncrementConst;
+					   }
+										
 					}
 					//Game Code, Text is done Scrolling
 					if (timing > 1560) {
 						if (timing > 1600 && isOneDone==false) {
-                            cutsceneOne = true;
+						cutsceneIntro=false;
+                            			cutsceneOne = true;
+						
                         }
 						
 						player.src = 'images/Spaceships/spaceship' + shipColor + 'C.png';
@@ -580,8 +589,8 @@
 						}
                         ctx.strokeStyle = ogStroke;
 						ctx.font = "20px Arial"
-                        ctx.fillText("Made for FBLA 2021", 125, 270);
-                        ctx.strokeText("Made for FBLA 2021", 125, 270);
+                        ctx.fillText("Made for FBLA 2021", 75, 270);
+                        ctx.strokeText("Made for FBLA 2021", 75, 270);
 						ctx.font = '10px Arial';
                         ctx.save();
                         ctx.translate(80, 150);
@@ -601,14 +610,15 @@
 
 					//During the game intro, make a text scroll
 					if(timing<1380&&textY+660>0){
-
-						//establish font and text style
-						ctx.fillStyle='yellow';
+						cutSceneIntro=true;
+						if(cutsceneIntro){
+//timingIncrement=.01;
+			    ctx.fillStyle='yellow';
 						ctx.strokeStyle='black';
 						ctx.font = "14px GoodTimes";
 
 						
-						if (timing > 1 && isOneDone==false && cutsceneOne=false) {
+						
                             ctx.fillStyle = "yellow";
                             ctx.fillRect(8, 8, 536, 336);
 							ctx.fillStyle = "gray";
@@ -629,16 +639,19 @@
                             ctx.fillText("Get Ready to Launch!", 80, 260);
 							ctx.strokeText("Get Ready to Launch!", 80, 260);
                             ctx.font = "25px GoodTimes";
-                        }
+                        
+			}
+						//establish font and text style
+						
 
 
 
 						//flashing line so players can skip by pressing x
-						if(textY+450<canvas.height-30 && timing%30>=0 && timing%30<=15){
-							ctx.font = "20px GoodTimes";
-							ctx.fillText("Press x to skip", 175, 330);
-							ctx.strokeText("Press x to skip", 175, 330);
-						}
+						//if(textY+450<canvas.height-30 && timing%30>=0 && timing%30<=15){
+						//	ctx.font = "20px GoodTimes";
+						//	ctx.fillText("Press x to skip", 175, 330);
+						//	ctx.strokeText("Press x to skip", 175, 330);
+						//}
 					}
 
 					//play different background music for each level
@@ -674,6 +687,35 @@
 
 
                         //Cutscene statements
+			if(cutsceneIntro){
+			    ctx.fillStyle='yellow';
+						ctx.strokeStyle='black';
+						ctx.font = "14px GoodTimes";
+
+						
+						
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+							ctx.fillStyle = "gray";
+							ctx.fillRect(10, 10, 530, 330);
+							ctx.fillStyle = "black";
+							ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+							ctx.fillStyle = "black";
+                            ctx.fillText("\"Welcome, cadet, to the International Astrological", 12, 80);
+							ctx.strokeText("\"Welcome, cadet, to the International Astrological", 12, 80);
+                            ctx.fillText("Network, or IAN for short. I am Delta, your personal", 12, 110);
+                            ctx.strokeText("Network, or IAN for short. I am Delta, your personal", 12, 110);
+                            ctx.fillText("AI who will be helping you on your journey through", 12, 140);
+                            ctx.strokeText("AI who will be helping you on your journey through", 12, 140);
+                            ctx.fillText("our solar system.\" - Delta", 12, 170);
+                            ctx.strokeText("our solar system.\" - Delta", 12, 170);
+							ctx.font = "20px GoodTimes";
+                            ctx.fillText("Get Ready to Launch!", 80, 260);
+							ctx.strokeText("Get Ready to Launch!", 80, 260);
+                            ctx.font = "25px GoodTimes";
+                        
+			}
                         if (cutsceneOne) {
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
                             ctx.drawImage(bkgrnd, 0, 0, 550, 347);
@@ -875,8 +917,8 @@
 							ctx.strokeText("LEVEL: "+(score/1000)+1, 210, 240);
 							ctx.fillText("Nice Try!", 65, 260);
 							ctx.strokeText("Nice Try!", 65, 260);
-                            ctx.fillText("Please refresh your browser or press esc to try again", 65, 290);
-                            ctx.strokeText("Please refresh your browser or press esc to try again", 65, 290);
+                            ctx.fillText("Please refresh your browser to try again", 65, 290);
+                            ctx.strokeText("Please refresh your browser to try again", 65, 290);
 						}
 					}
 				}
@@ -893,7 +935,9 @@
                     case 37: leftKey=true;break;
                     case 39: rightKey=true;break;
                     case 88: xKey=true;break;
-                }
+                    case 27: window.location.reload(); break;
+		    case 65: alert(timing);
+		}
             }
             function keyUpHandler(e){
                 switch(e.keyCode){
@@ -903,11 +947,6 @@
                     case 88: xKey=false;break;
                 }
             }
-	function  keyDownHandler(e) {
-	    if(e.key === "Escape") {
-		location.reload();
-	    }
-	}
             //alert("hello");
 	   </script>
     </head>
