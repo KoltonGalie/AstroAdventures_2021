@@ -11,9 +11,9 @@
                src: url(fonts/GoodTimes/goodTimes.ttf);
            }
        </style>
-       <title>Astro Adventures VideoGame</title>
+       <title>Astro Adventures Video Game</title>
 	   <script>
-	   	
+	   	//alert("good");
 			//canvas variables
 			var canvas, ctx, timing;
 			
@@ -36,8 +36,10 @@
 			//game mechanics
 			var level;
 			var health;
-			var score;
-			var timingIncrement = 1;
+		   var score;
+		   var timingIncrementConst = 2;
+		   
+			var timingIncrement = timingIncrementConst;
 			
 			//start scene variables
 			var startScene=true;
@@ -79,10 +81,10 @@
 			
 			//player variables
 			var player=new Image();
-			var shipColor = "rainbow";
+			var shipColor = "Rainbow";
            	var playerX, playerY;
             var playerS;
-            
+		   var playerSconst = 5;
            	//regular shot variables
            	var shotImg=new Image();
            	shotImg.src='images/shot.png'; 
@@ -116,13 +118,12 @@
 				//set enemy variables
 				enemyRate=200;
 				enemys=new Array();
-				enMaxSpeed=.5;
+				enMaxSpeed=2;
 				
 				//set player variables
 				playerX=0;
-                playerY=(canvas.height-(player.height/8));
-               	playerS=2;
-
+				playerY = (canvas.height - (player.height / 8));
+                playerS = playerSconst;
 				//sound variables from audio tags
               	hit=document.getElementById('bomb');
               	theme=document.getElementById('theme');
@@ -179,19 +180,19 @@
 								charScene=false;
 							}
 							if(charSelection == 2) {
-                                shipColor = "white"; charScene = false;
+                                shipColor = "White"; charScene = false;
 							}
                             if (charSelection == 3) {
-                                shipColor = "pink"; charScene = false;
+                                shipColor = "Pink"; charScene = false;
 							}
                             if (charSelection == 4) {
-                                shipColor = "yellow"; charScene = false;
+                                shipColor = "Yellow"; charScene = false;
 							}
                             if (charSelection == 5) {
-                                shipColor = "blue"; charScene = false;
+                                shipColor = "Blue"; charScene = false;
 							}
                             if (charSelection == 6) {
-                                shipColor = "rainbow"; charScene = false;
+                                shipColor = "Rainbow"; charScene = false;
                             }
 						}else if(instructScene){
 							instructScene=false;
@@ -241,85 +242,102 @@
 					if (xKey && cutsceneOne) {
 						cutsceneOne = false;
 						isOneDone = true;
-						timingIncrement = 1;
+						timing=1600;
+                        			timingIncrement = timingIncrementConst;
 						//timing = scoreOne;
 						enemys = [];
 						healthW = 95;
-                        en.src = 'images/alien2.png';
+                        health = 5;
+                        en.src = 'images/alien.png';
 					}
                     if (xKey && cutsceneTwo) {
 						cutsceneTwo = false;
                         isTwoDone = true;
-                        timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						healthW = 95;
+						health = 5;
 						enemyRate = 180;
 						enemys = [];
-						playerS = 2.5;
-                        en.src = 'images/alien2.png';
+                        playerS = playerSconst+.5;
+                        en.src = 'images/asteroid.png';
 					}
                     if (xKey && cutsceneThree) {
                         cutsceneThree = false;
                         isThreeDone = true;
-                        timingIncrement = 1;
+                        timingIncrement = timingIncrementConst;
 						healthW = 95;
+                        health = 5;
 						enemyRate = 160;
 						enemys = [];
-						playerS = 3;
+                        playerS = playerSconst+1;
                         en.src = 'images/alien2.png';
 					}
                     if (xKey && cutsceneFour) {
                         cutsceneFour = false;
                         isFourDone = true;
-                        timingIncrement = 1;
-                        healthW = 95;
+                        timingIncrement = timingIncrementConst;
+						healthW = 95;
+                        health = 5;
 						enemyRate = 140;
 						enemys = [];
-						playerS = 3.2;
-                        en.src = 'images/alien2.png';
+                        playerS = playerSconst+1.1;
+                        en.src = 'images/pirate.png';
 					}
                     if (xKey && cutsceneFive) {
                         cutsceneFive = false;
                         isFiveDone = true;
-                        timingIncrement = 1;
-                        healthW = 95;
+                        timingIncrement = timingIncrementConst;
+						healthW = 95;
+                        health = 5;
 						enemyRate = 120;
 						enemys = [];
-						playerS = 3.5;
-                        en.src = 'images/alien2.png';
+                        playerS = playerSconst+1.3;
+                        en.src = 'images/pirate.png';
 					}
                     if (xKey && cutsceneEnd) {
                         cutsceneEnd = false;
                         isEndDone = true;
-                        timingIncrement = 1;
-                        healthW = 95;
+                        timingIncrement = timingIncrementConst;
+						healthW = 95;
+                        health = 5;
 						enemyRate = 100;
 						enemys = [];
                         en.src = 'images/alien2.png';
                     }
 					//alert("Hello");
 					//update timing 60 tps
-					timing+=timingIncrement;
 					
+					timer=setInterval(setTimer, 17);
 					//make text scroll up
 					textY-=.5;
-
+					
+					
 					//Press X to skip text scroll
-					if (xKey && timing < 1560) {
-						timing = 1560;
-						timingIncrement = 1;
+					if (timing<1560) {
+						cutsceneIntro=true;
+						
+					   if(xKey && cutsceneIntro){
+						cutsceneIntro=false;
+						timing = 1600;
+                        			timingIncrement = timingIncrementConst;
+					   }
+										
 					}
 					//Game Code, Text is done Scrolling
 					if (timing > 1560) {
 						if (timing > 1600 && isOneDone==false) {
-                            cutsceneOne = true;
+						cutsceneIntro=false;
+                            			cutsceneOne = true;
+						timingIncrement=timingIncrementConst;
+						
                         }
 						
-						player.src = 'images/spaceships/spaceship' + shipColor + 'C.png';
+						player.src = 'images/Spaceships/spaceship' + shipColor + 'C.png';
                         //alert(player.src)
 						//if score increases by 2000, move to next cutscene
 						if (score % 2000 == 0 && score != 0 && health != 0) {
                             //level++; //increase level
-                            //playerS += 2; //increase player movement speed
+                            //playerS += 1; //increase player movement speed
                             //score += 100; //increase score by 100pts
 
 							if (score >= scoreTwo && score < scoreThree && isTwoDone==false) {
@@ -338,8 +356,11 @@
                                 cutsceneFive = true;
                             }
                             if (score >= scoreEnd && isEndDone == false) {
-                                cutsceneFive = true;
+                                cutsceneEnd = true;
                             }
+				if(cutsceneOne || cutsceneTwo || cutsceneThree || cutsceneFour || cutsceneFive || cutsceneEnd){
+					enemies = [];
+				}
 						}
 
 
@@ -375,13 +396,13 @@
 						}
 
 						//when the right arrow is pressed, move right
-						if(rightKey && playerX<canvas.width-(player.width/13)){ playerX+=playerS; player.src='images/spaceships/spaceship'+shipColor+'R.png'; }
+						if(rightKey && playerX<canvas.width-(player.width/13)){ playerX+=playerS; player.src='images/Spaceships/spaceship'+shipColor+'R.png'; }
 
 				//when the left arrow is pressed, move left
-				else if(leftKey && playerX>=0 ){ playerX-=playerS; player.src='images/spaceships/spaceship'+shipColor+'L.png'; }
+				else if(leftKey && playerX>=0 ){ playerX-=playerS; player.src='images/Spaceships/spaceship'+shipColor+'L.png'; }
 
 				//if the player is not moving, use idle sprite
-				else player.src='images/spaceships/spaceship'+shipColor+'C.png';
+				else player.src='images/Spaceships/spaceship'+shipColor+'C.png';
 
 				//if spacebar is pressed, shoot
 				if(spaceBar&&prevSpace!=spaceBar) shotArr.push(new shot(playerX+(player.width/16)-17, playerY-(player.height/16), shotImg));
@@ -460,7 +481,7 @@
 							ctx.strokeStyle=ugStroke;
                             ctx.strokeText("Main Menu", mainX + 50, mainY-100);
 						}
-                        if (shipColor == "white")
+                        if (shipColor == "White")
                             ctx.fillStyle = ugFill;
                         else
                             ctx.fillStyle = ogFill;
@@ -472,7 +493,7 @@
 							ctx.strokeStyle=ugStroke;
                             ctx.strokeText("White", mainX + 70, mainY+30);
 						}
-                        if (shipColor == "pink")
+                        if (shipColor == "Pink")
                             ctx.fillStyle = ugFill;
                         else
                             ctx.fillStyle = ogFill;
@@ -484,7 +505,7 @@
 							ctx.strokeStyle=ugStroke;
 							ctx.strokeText("Pink", mainX+80, mainY+60);
 						}
-                        if (shipColor== "yellow")
+                        if (shipColor== "Yellow")
                             ctx.fillStyle = ugFill;
                         else
                             ctx.fillStyle = ogFill;
@@ -496,7 +517,7 @@
                             ctx.strokeStyle = ugStroke;
                             ctx.strokeText("Yellow", mainX+55, mainY + 90);
 						}
-                        if (shipColor == "blue")
+                        if (shipColor == "Blue")
                             ctx.fillStyle = ugFill;
                         else
                             ctx.fillStyle = ogFill;
@@ -508,7 +529,7 @@
 							ctx.strokeStyle = ugStroke;
 							ctx.strokeText("Blue", mainX+75, mainY + 120);
 						}
-						if(shipColor=="rainbow")
+						if(shipColor=="Rainbow")
 							ctx.fillStyle = ugFill;
 						else
                             ctx.fillStyle = ogFill;
@@ -570,8 +591,16 @@
 						}
                         ctx.strokeStyle = ogStroke;
 						ctx.font = "20px Arial"
-                        ctx.fillText("Made by videogame design group 2084-901", 75, 270);
-                        ctx.strokeText("Made by videogame design group 2084-901", 75, 270);
+                        ctx.fillText("Made for FBLA 2021", 175, 270);
+                        ctx.strokeText("Made for FBLA 2021", 175, 270);
+			ctx.fillText("By Kolton Galie and George Clark", 130, 290);
+                        ctx.strokeText("By Kolton Galie and George Clark", 130, 290);
+						ctx.font = '10px Arial';
+                        ctx.save();
+                        ctx.translate(80, 150);
+						ctx.rotate(-0.2 * Math.PI);
+                        ctx.fillText('Use left and right arrow keys and spacebar!', 0, 0);
+                        ctx.restore();
 					}
 					
 					//alert(startSelection);
@@ -585,14 +614,15 @@
 
 					//During the game intro, make a text scroll
 					if(timing<1380&&textY+660>0){
-
-						//establish font and text style
-						ctx.fillStyle='yellow';
+						cutSceneIntro=true;
+						if(cutsceneIntro){
+			timingIncrement=.01;
+			    ctx.fillStyle='yellow';
 						ctx.strokeStyle='black';
 						ctx.font = "14px GoodTimes";
 
 						
-						if (timing > 1 && isOneDone==false) {
+						
                             ctx.fillStyle = "yellow";
                             ctx.fillRect(8, 8, 536, 336);
 							ctx.fillStyle = "gray";
@@ -613,16 +643,19 @@
                             ctx.fillText("Get Ready to Launch!", 80, 260);
 							ctx.strokeText("Get Ready to Launch!", 80, 260);
                             ctx.font = "25px GoodTimes";
-                        }
+                        
+			}
+						//establish font and text style
+						
 
 
 
 						//flashing line so players can skip by pressing x
-						if(textY+450<canvas.height-30 && timing%30>=0 && timing%30<=15){
-							ctx.font = "20px GoodTimes";
-							ctx.fillText("Press x to skip", 175, 330);
-							ctx.strokeText("Press x to skip", 175, 330);
-						}
+						//if(textY+450<canvas.height-30 && timing%30>=0 && timing%30<=15){
+						//	ctx.font = "20px GoodTimes";
+						//	ctx.fillText("Press x to skip", 175, 330);
+						//	ctx.strokeText("Press x to skip", 175, 330);
+						//}
 					}
 
 					//play different background music for each level
@@ -658,6 +691,36 @@
 
 
                         //Cutscene statements
+			if(cutsceneIntro){
+			    //timingIncrement=.01;
+			    ctx.fillStyle='yellow';
+						ctx.strokeStyle='black';
+						ctx.font = "14px GoodTimes";
+			
+						
+						
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(8, 8, 536, 336);
+							ctx.fillStyle = "gray";
+							ctx.fillRect(10, 10, 530, 330);
+							ctx.fillStyle = "black";
+							ctx.fillRect(430, 220, 110, 120);
+                            ctx.drawImage(AI, 430, 220, 110, 120);
+							ctx.fillStyle = "black";
+                            ctx.fillText("\"Welcome, cadet, to the International Astrological", 12, 80);
+							ctx.strokeText("\"Welcome, cadet, to the International Astrological", 12, 80);
+                            ctx.fillText("Network, or IAN for short. I am Delta, your personal", 12, 110);
+                            ctx.strokeText("Network, or IAN for short. I am Delta, your personal", 12, 110);
+                            ctx.fillText("AI who will be helping you on your journey through", 12, 140);
+                            ctx.strokeText("AI who will be helping you on your journey through", 12, 140);
+                            ctx.fillText("our solar system.\" - Delta", 12, 170);
+                            ctx.strokeText("our solar system.\" - Delta", 12, 170);
+							ctx.font = "20px GoodTimes";
+                            ctx.fillText("Get Ready to Launch!", 80, 260);
+							ctx.strokeText("Get Ready to Launch!", 80, 260);
+                            ctx.font = "25px GoodTimes";
+                        
+			}
                         if (cutsceneOne) {
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
                             ctx.drawImage(bkgrnd, 0, 0, 550, 347);
@@ -678,8 +741,8 @@
                             ctx.strokeText("mass as Earth and is home to the tallest mountain in our entire solar system!!", 12, 110);
                             ctx.fillText("How cool is that!", 12, 140);
                             ctx.strokeText("How cool is that!", 12, 140);
-                            ctx.fillText("Uh oh looks like we have something coming up ahead…", 12, 170);
-                            ctx.strokeText("Uh oh looks like we have something coming up ahead…", 12, 170);
+                            ctx.fillText("Uh oh looks like we have something coming up aheadâ€¦", 12, 170);
+                            ctx.strokeText("Uh oh looks like we have something coming up aheadâ€¦", 12, 170);
                             ctx.font = "20px GoodTimes";
                             ctx.fillText("ALIENS!\" - Delta", 80, 260);
 							ctx.strokeText("ALIENS!\" - Delta", 80, 260);
@@ -702,10 +765,10 @@
                             ctx.drawImage(AI, 430, 220, 110, 120);
 							ctx.fillStyle = "black";
                             ctx.font = "15px arial";
-                            ctx.fillText("\"I’ve never seen anything like that before on any of my journeys. I guess we’re", 12, 80);
-                            ctx.strokeText("\"I’ve never seen anything like that before on any of my journeys. I guess we’re", 12, 80);
-                            ctx.fillText("the lucky ones haha. We’re approaching Jupiter, home of the Great Red Spot.", 12, 110);
-                            ctx.strokeText("the lucky ones haha. We’re approaching Jupiter, home of the Great Red Spot.", 12, 110);
+                            ctx.fillText("\"Iâ€™ve never seen anything like that before on any of my journeys. I guess weâ€™re", 12, 80);
+                            ctx.strokeText("\"Iâ€™ve never seen anything like that before on any of my journeys. I guess weâ€™re", 12, 80);
+                            ctx.fillText("the lucky ones haha. Weâ€™re approaching Jupiter, home of the Great Red Spot.", 12, 110);
+                            ctx.strokeText("the lucky ones haha. Weâ€™re approaching Jupiter, home of the Great Red Spot.", 12, 110);
                             ctx.fillText("The massive planet spins the fastest in our solar system with a magnetic ", 12, 140);
                             ctx.strokeText("The massive planet spins the fastest in our solar system with a magnetic ", 12, 140);
                             ctx.fillText("field 14 times stronger than earth. ", 12, 170);
@@ -733,8 +796,8 @@
                             ctx.drawImage(AI, 430, 220, 110, 120);
                             ctx.fillStyle = "black";
                             ctx.font = "15px arial";
-                            ctx.fillText("\"Who would’ve thought asteroids could be so deadly right? Anyways,", 12, 80);
-                            ctx.strokeText("\"Who would’ve thought asteroids could be so deadly right? Anyways,", 12, 80);
+                            ctx.fillText("\"Who wouldâ€™ve thought asteroids could be so deadly right? Anyways,", 12, 80);
+                            ctx.strokeText("\"Who wouldâ€™ve thought asteroids could be so deadly right? Anyways,", 12, 80);
                             ctx.fillText("everyone's favorite planet Saturn is up next, right? Being mostly made of ", 12, 110);
                             ctx.strokeText("everyone's favorite planet Saturn is up next, right? Being mostly made of ", 12, 110);
                             ctx.fillText("Hydrogen, Saturn has the most visible rings in our solar system and has", 12, 140);
@@ -762,14 +825,14 @@
                             ctx.drawImage(AI, 430, 220, 110, 120);
                             ctx.fillStyle = "black";
                             ctx.font = "15px arial";
-                            ctx.fillText("\"I’m really tired of these pesky aliens running about. We’re approaching the", 12, 80);
-                            ctx.strokeText("\"I’m really tired of these pesky aliens running about. We’re approaching the", 12, 80);
+                            ctx.fillText("\"Iâ€™m really tired of these pesky aliens running about. Weâ€™re approaching the", 12, 80);
+                            ctx.strokeText("\"Iâ€™m really tired of these pesky aliens running about. Weâ€™re approaching the", 12, 80);
                             ctx.fillText("ice giant, Uranus. The planet is four times bigger than Earth, rotates on its side,", 12, 110);
                             ctx.strokeText("ice giant, Uranus. The planet is four times bigger than Earth, rotates on its side,", 12, 110);
                             ctx.fillText("and is mainly made up of gases with the exception of its core and surroundings.", 12, 140);
                             ctx.strokeText("and is mainly made up of gases with the exception of its core and surroundings.", 12, 140);
-                            ctx.fillText("I hope we don’t freeze out here.", 12, 170);
-                            ctx.strokeText("I hope we don’t freeze out here.", 12, 170);
+                            ctx.fillText("I hope we donâ€™t freeze out here.", 12, 170);
+                            ctx.strokeText("I hope we donâ€™t freeze out here.", 12, 170);
                             //ctx.font = "15px Arial";
                             ctx.fillText("Is that a man out there?? Uh oh,", 12, 200);
 							ctx.strokeText("Is that a man out there?? Uh oh,", 12, 200);
@@ -796,12 +859,12 @@
                             ctx.font = "15px arial";
                             ctx.fillText("\"Who knew space pirates could be out this far huh. Oh well, glad its over.", 12, 80);
                             ctx.strokeText("\"Who knew space pirates could be out this far huh. Oh well, glad its over.", 12, 80);
-                            ctx.fillText("There it is… Neptune! Neptune is a gas planet that is the farthest away", 12, 110);
-                            ctx.strokeText("There it is… Neptune! Neptune is a gas planet that is the farthest away", 12, 110);
+                            ctx.fillText("There it isâ€¦ Neptune! Neptune is a gas planet that is the farthest away", 12, 110);
+                            ctx.strokeText("There it isâ€¦ Neptune! Neptune is a gas planet that is the farthest away", 12, 110);
                             ctx.fillText("from earth. Other than us, only one other ship has ever been here.", 12, 140);
                             ctx.strokeText("from earth. Other than us, only one other ship has ever been here.", 12, 140);
-                            ctx.fillText("It cannot support any life meaning that there shouldn’t be space pirates out here", 12, 170);
-                            ctx.strokeText("It cannot support any life meaning that there shouldn’t be space pirates out here", 12, 170);
+                            ctx.fillText("It cannot support any life meaning that there shouldnâ€™t be space pirates out here", 12, 170);
+                            ctx.strokeText("It cannot support any life meaning that there shouldnâ€™t be space pirates out here", 12, 170);
                             //ctx.font = "15px Arial";
                             ctx.fillText("Wait, what's that coming over the horizon?? Uh oh,", 12, 200);
                             ctx.strokeText("Wait, what's that coming over the horizon?? Uh oh,", 12, 200);
@@ -828,8 +891,8 @@
                             ctx.font = "15px arial";
                             ctx.fillText("\"We made it to Neptune, gathered information, survived aliens, an asteroid belt,", 12, 80);
                             ctx.strokeText("\"We made it to Neptune, gathered information, survived aliens, an asteroid belt,", 12, 80);
-                            ctx.fillText("and an armada of pirates. I’m glad we can return home knowing", 12, 110);
-							ctx.strokeText("and an armada of pirates. I’m glad we can return home knowing", 12, 110);
+                            ctx.fillText("and an armada of pirates. Iâ€™m glad we can return home knowing", 12, 110);
+							ctx.strokeText("and an armada of pirates. Iâ€™m glad we can return home knowing", 12, 110);
 							ctx.font = "18px arial";
                             ctx.fillText("our mission is complete.\" - Delta", 12, 140);
                             ctx.strokeText("our mission is complete.\" - Delta", 12, 140);
@@ -837,8 +900,8 @@
                             ctx.fillText("THANKS FOR PLAYING!", 80, 260);
 							ctx.strokeText("THANKS FOR PLAYING!", 80, 260);
                             ctx.font = "20px GoodTimes";
-                            ctx.fillText("Press x to start", 175, 330);
-                            ctx.strokeText("Press x to start", 175, 330);
+                            ctx.fillText("Press x to free play", 145, 330);
+                            ctx.strokeText("Press x to free play", 145, 330);
                             ctx.font = "25px GoodTimes";
                         }
 						//if health runs out, display the GAME OVER screen
@@ -857,15 +920,19 @@
 							ctx.font = "20px arial";
 							ctx.fillText("LEVEL: "+(score/1000)+1, 210, 240);
 							ctx.strokeText("LEVEL: "+(score/1000)+1, 210, 240);
-							ctx.fillText("Made by videogame design group 2084-901", 65, 260);
-							ctx.strokeText("Made by videogame design group 2084-901", 65, 260);
+							ctx.fillText("Good Job!", 220, 260);
+							ctx.strokeText("Good Job!", 220, 260);
+                            ctx.fillText("Please press the Esc key to try again", 95, 290);
+                            ctx.strokeText("Please press the Esc key to try again", 95, 290);
 						}
 					}
 				}
 			}
 		
 		
-		
+		function setTimer(){//This function is purely to start the timer for the words per minute calculation. 
+            		timing+=timingIncrement; 
+       		}
 			//key pressed functions
 	        function keyDownHandler(e){
                 switch(e.keyCode){
@@ -873,7 +940,9 @@
                     case 37: leftKey=true;break;
                     case 39: rightKey=true;break;
                     case 88: xKey=true;break;
-                }
+                    case 27: window.location.reload(); break;
+		    //case 65: alert(timing);
+		}
             }
             function keyUpHandler(e){
                 switch(e.keyCode){
@@ -881,6 +950,7 @@
                     case 37: leftKey=false;break;
                     case 39: rightKey=false;break;
                     case 88: xKey=false;break;
+		    case 27: window.location.reload(); break;
                 }
             }
             //alert("hello");
