@@ -172,6 +172,7 @@
 			
 			//update function
 		   function update() {
+			   //start menu selections
 				if(startScene==true){
 					if(spaceBar&&prevSpace!=spaceBar){
 						//alert(startSelection);
@@ -256,6 +257,7 @@
                         health = 5;
                         en.src = 'images/alien.png';
 					}
+		//skip cutscenes and start each level with variables
                     if (xKey && cutsceneTwo) {
 						cutsceneTwo = false;
                         isTwoDone = true;
@@ -467,6 +469,7 @@
 			
 			//draw function
 			function draw(){
+				//draw the start menu
 				if(startScene==true){
 					var mainX=145;
 					var mainY=140;
